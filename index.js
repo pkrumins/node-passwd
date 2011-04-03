@@ -34,7 +34,7 @@ exports.del = function (username) {
 
 exports.getAll = getUsers;
 
-exports.getUser = function (username, cb) {
+exports.get = function (username, cb) {
     getUsers(function (users) {
         users.forEach(function (user) {
             if (user.username == username) {
@@ -48,7 +48,7 @@ exports.getUser = function (username, cb) {
 function getUsers (cb) {
     fs.readFile('/etc/passwd', function (err, users) {
         if (err) throw err;
-        cb(data.split('\n').map(function (user) {
+        cb(users.split('\n').map(function (user) {
             var fields = user.split(':');
             return {
                 username : fields[0],
