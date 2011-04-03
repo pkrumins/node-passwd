@@ -48,18 +48,26 @@ exports.get = function (username, cb) {
 function getUsers (cb) {
     fs.readFile('/etc/passwd', function (err, users) {
         if (err) throw err;
-        cb(users.split('\n').map(function (user) {
-            var fields = user.split(':');
-            return {
-                username : fields[0],
-                password : fields[1],
-                userId : fields[2],
-                groupId : fields[3],
-                name : fields[4],
-                homedir : fields[5],
-                shell : fields[6]
-            }
-        }));
+        cb(
+            users
+            .toString()
+            .split('\n')
+            .filter(function (user) {
+                return user.length && user[0] != '#';
+            })
+            .map(function (user) {
+                var fields = user.split(':');
+                return {
+                    username : fields[0],
+                    password : fields[1],
+                    userId : fields[2],
+                    groupId : fields[3],
+                    name : fields[4],
+                    homedir : fields[5],
+                    shell : fields[6]
+                }
+            });
+        );
     });
 }
 
