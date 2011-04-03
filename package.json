@@ -1,6 +1,6 @@
 {
     "name" : "passwd",
-    "version" : "0.0.1",
+    "version" : "0.0.2",
     "description" : "Control /etc/passwd from node.js",
     "main" : "./index.js",
     "repository" : {
