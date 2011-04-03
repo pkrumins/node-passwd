@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-exports.addUser = function (user, pass) {
+exports.add = function (username, pass) {
     fs.open('/etc/passwd', 'a', function (err, fd) {
         if (err) throw err;
 
@@ -13,13 +13,19 @@ exports.addUser = function (user, pass) {
     });
 }
 
-exports.delUser = function (user) {
+exports.del = function (username) {
 
 }
 
-exports.getUsers = function () {
+exports.getAll = function () {
 
 }
+
+exports.getUser = function (username) {
+
+}
+
+exports.getAllUsers = getUsers;
 
 exports.maxUserId = function () {
 
@@ -28,7 +34,7 @@ exports.maxUserId = function () {
 function getUsers (cb) {
     fs.readFile('/etc/passwd', function (err, users) {
         if (err) throw err;
-        return data.split('\n').map(function (user) {
+        cb(data.split('\n').map(function (user) {
             var fields = user.split(':');
             return {
                 username : fields[0],
@@ -39,7 +45,7 @@ function getUsers (cb) {
                 homedir : fields[5],
                 shell : fields[6]
             }
-        });
+        }));
     });
 }
 
