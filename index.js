@@ -23,8 +23,13 @@ exports.add = function (username, pass, opts) {
         if (opts.createHome) useraddOpts.push('-m');
         if (opts.group) useraddOpts = useraddOpts.concat(['-g', opts.group]);
         useraddOpts = useraddOpts.concat(['-p', shadowPass]);
-        console.log(useraddOpts);
-        var useradd = spawn('useradd', useraddOpts);
+        var cmd = 'useradd';
+        var args = useraddOpts;
+        if (opts.sudo) {
+            cmd = 'sudo';
+            args = ['useradd'].concat(args);
+        }
+        var useradd = spawn(cmd, args);
     });
 }
 
