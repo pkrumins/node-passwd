@@ -1,34 +1,48 @@
 var fs = require('fs');
+var spawn = require('child_process').spawn;
 
-exports.add = function (username, pass) {
-    fs.open('/etc/passwd', 'a', function (err, fd) {
-        if (err) throw err;
+function generateSalt (n) {
+    var salt = [];
+    var alphabet = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (var i = 0; i < n; i++) salt.push(alphabet[parseInt(Math.random()*alphabet.length)]);
+    return salt.join('');
+}
 
-        
+exports.shadowPass = function (pass, cb) {
+    var salt = generateSalt(8);
+    var openssl = spawn('openssl', ['passwd', '-1', '-salt', salt, pass]);
+    openssl.stdout.on('data', function (buf) {
+        cb(buf.toString().slice(0,-1));
+    });
+}
 
-        var entry = [userName, unixPass(pass), newUserId(), 101, '/home/' + userName, '/bin/false']
-        fs.write(fd, entry.join(':') + '\n', function (err, fd) {
-            fs.close(fd);
-        });
+exports.add = function (username, pass, opts) {
+    var opts = opts || {};
+    exports.shadowPass(pass, function (shadowPass) {
+        var useraddOpts = [];
+        if (opts.createHome) useraddOpts.push('-m');
+        if (opts.group) useraddOpts = useraddOpts.concat(['-g', opts.group]);
+        useraddOpts = useraddOpts.concat(['-p', shadowPass]);
+        console.log(useraddOpts);
+        var useradd = spawn('useradd', useraddOpts);
     });
 }
 
 exports.del = function (username) {
-
+    spawn('userdel', [username]);
 }
 
-exports.getAll = function () {
+exports.getAll = getUsers;
 
-}
-
-exports.getUser = function (username) {
-
-}
-
-exports.getAllUsers = getUsers;
-
-exports.maxUserId = function () {
-
+exports.getUser = function (username, cb) {
+    getUsers(function (users) {
+        users.forEach(function (user) {
+            if (user.username == username) {
+                cb(user);
+                return;
+            }
+        });
+    });
 }
 
 function getUsers (cb) {
