@@ -1,7 +1,7 @@
 This is a node.js module for controlling /etc/passwd. I needed to do that
 in my http://browserling.com startup.
 
-It was written by Peteris Krumins (peter@catonmat.net).
+It was written by Peteris Krumins (peter@catonmat.net, @pkrumins on twitter).
 His blog is at http://www.catonmat.net  --  good coders code, great reuse.
 
 ------------------------------------------------------------------------------
@@ -28,6 +28,6 @@ That's it.
 
 
 Sincerely,
-Peteris Krumins
+Peteris Krumins (twitter: @pkrumins)
 http://www.catonmat.net
 
