@@ -10,9 +10,13 @@ Here is an example usage:
 
     var passwd = require('passwd');
 
-    passwd.addUser('pkrumins', 'password');
-    passwd.delUser('pkrumins');
-    passwd.getUsers(function (users) {
+    passwd.add('pkrumins', 'password', { createHome : true }); // calls `useradd -p shadowpassword -m pkrumins`
+
+    passwd.del('pkrumins'); // calls `userdel pkrumins`
+
+    passwd.get('pkrumins', function (user) { ... }) // gets 'pkrumins' user entry from /etc/passwd
+
+    passwd.getAll(function (users) { // gets all users from /etc/passwd
         users.forEach(function (user) {
             console.log(user.username);
         });
