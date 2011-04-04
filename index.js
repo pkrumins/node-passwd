@@ -24,17 +24,45 @@ exports.add = function (username, pass, opts) {
         if (opts.group) useraddOpts = useraddOpts.concat(['-g', opts.group]);
         useraddOpts = useraddOpts.concat(['-p', shadowPass]);
         var cmd = 'useradd';
-        var args = useraddOpts;
         if (opts.sudo) {
             cmd = 'sudo';
-            args = ['useradd'].concat(args);
+            useraddOpts = ['useradd'].concat(useraddOpts);
         }
-        var useradd = spawn(cmd, args);
+        spawn(cmd, useraddOpts);
     });
 }
 
-exports.del = function (username) {
-    spawn('userdel', [username]);
+exports.del = function (username, opts) {
+    var opts = opts || {};
+    var cmd = 'userdel';
+    var args = [username];
+    if (opts.sudo) {
+        cmd = 'sudo';
+        args = ['userdel'].concat(args);
+    }
+    spawn(cmd, args);
+}
+
+exports.lock = function (username, opts) {
+    var opts = opts || {};
+    var cmd = 'usermod';
+    var args = ['-L', username];
+    if (opts.sudo) {
+        cmd = 'sudo';
+        args = ['usermod'].concat(args);
+    }
+    spawn(cmd, args);
+}
+
+exports.unlock = function (username) {
+    var opts = opts || {};
+    var cmd = 'usermod';
+    var args = ['-U', username];
+    if (opts.sudo) {
+        cmd = 'sudo';
+        args = ['usermod'].concat(args);
+    }
+    spawn(cmd, args);
 }
 
 exports.getAll = getUsers;
