@@ -99,7 +99,7 @@ function getUsers (cb) {
                     homedir : fields[5],
                     shell : fields[6]
                 }
-            });
+            })
         );
     });
 }
