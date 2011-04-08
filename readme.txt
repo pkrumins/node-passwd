@@ -10,13 +10,31 @@ Here is an example usage:
 
     var passwd = require('passwd');
 
-    passwd.add('pkrumins', 'password', { createHome : true }); // calls `useradd -p shadowpassword -m pkrumins`
+    // add a new user (calls `useradd -m -p shadowPass pkrumins`)
+    passwd.add('pkrumins', 'password', { createHome : true }, function (status) {
+        if (status == 0) {
+            console.log('great success! pkrumins added!');
+        }
+        else {
+            console.log('not so great success! pkrumins not added! useradd command returned: ' + status);
+        }
+    });
 
-    passwd.del('pkrumins'); // calls `userdel pkrumins`
 
-    passwd.get('pkrumins', function (user) { ... }) // gets 'pkrumins' user entry from /etc/passwd
+    // calls `userdel pkrumins`
+    passwd.del('pkrumins', function (status) { ... });
 
-    passwd.getAll(function (users) { // gets all users from /etc/passwd
+    // locks user pkrumins via `usermod -L pkrumins`
+    passwd.lock('pkrumins', function (status) { ... })
+
+    // unlocks user pkrumins via `usermod -U pkrumins`
+    passwd.unlock('pkrumins', function (status) { ... })
+
+    // gets 'pkrumins' user entry from /etc/passwd
+    passwd.get('pkrumins', function (user) { ... })
+
+    // gets all users from /etc/passwd
+    passwd.getAll(function (users) {
         users.forEach(function (user) {
             console.log(user.username);
         });
@@ -25,7 +43,6 @@ Here is an example usage:
 That's it.
 
 ------------------------------------------------------------------------------
-
 
 Sincerely,
 Peteris Krumins (twitter: @pkrumins)
