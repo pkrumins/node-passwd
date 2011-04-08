@@ -16,8 +16,9 @@ exports.shadowPass = function (pass, cb) {
     });
 }
 
-exports.add = function (username, pass, opts) {
+exports.add = function (username, pass, opts, cb) {
     var opts = opts || {};
+    var cb = cb || function () { };
     exports.shadowPass(pass, function (shadowPass) {
         var useraddOpts = [];
         if (opts.createHome) useraddOpts.push('-m');
@@ -28,41 +29,56 @@ exports.add = function (username, pass, opts) {
             cmd = 'sudo';
             useraddOpts = ['useradd'].concat(useraddOpts);
         }
-        spawn(cmd, useraddOpts);
+        var passwd = spawn(cmd, useraddOpts);
+        passwd.on('exit', function (code, signal) {
+            cb(code);
+        });
     });
 }
 
-exports.del = function (username, opts) {
+exports.del = function (username, opts, cb) {
     var opts = opts || {};
+    var cb = cb || function () { };
     var cmd = 'userdel';
     var args = [username];
     if (opts.sudo) {
         cmd = 'sudo';
         args = ['userdel'].concat(args);
     }
-    spawn(cmd, args);
+    var passwd = spawn(cmd, args);
+    passwd.on('exit', function (code, signal) {
+        cb(code);
+    });
 }
 
-exports.lock = function (username, opts) {
+exports.lock = function (username, opts, cb) {
     var opts = opts || {};
+    var cb = cb || function () { };
     var cmd = 'usermod';
     var args = ['-L', username];
     if (opts.sudo) {
         cmd = 'sudo';
         args = ['usermod'].concat(args);
     }
-    spawn(cmd, args);
+    var passwd = spawn(cmd, args);
+    passwd.on('exit', function (code, signal) {
+        cb(code);
+    });
 }
 
-exports.unlock = function (username) {
+exports.unlock = function (username, cb) {
     var opts = opts || {};
+    var cb = cb || function () { };
     var cmd = 'usermod';
     var args = ['-U', username];
     if (opts.sudo) {
         cmd = 'sudo';
         args = ['usermod'].concat(args);
     }
-    spawn(cmd, args);
+    var passwd = spawn(cmd, args);
+    passwd.on('exit', function (code, signal) {
+        cb(code);
+    });
 }
 
 exports.getAll = getUsers;
