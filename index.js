@@ -23,6 +23,7 @@ exports.add = function (username, pass, opts, cb) {
         var useraddOpts = [];
         if (opts.createHome) useraddOpts.push('-m');
         if (opts.group) useraddOpts = useraddOpts.concat(['-g', opts.group]);
+        if (opts.shell) useraddOpts = useraddOpts.concat(['-s', opts.shell]);
         useraddOpts = useraddOpts.concat(['-p', shadowPass]);
         useraddOpts.push(username);
         var cmd = 'useradd';
