@@ -68,7 +68,7 @@ exports.lock = function (username, opts, cb) {
     });
 }
 
-exports.unlock = function (username, cb) {
+exports.unlock = function (username, opts, cb) {
     var opts = opts || {};
     var cb = cb || function () { };
     var cmd = 'usermod';
@@ -80,6 +80,23 @@ exports.unlock = function (username, cb) {
     var passwd = spawn(cmd, args);
     passwd.on('exit', function (code, signal) {
         cb(code);
+    });
+}
+
+exports.passwd = function (username, pass, opts, cb) {
+    var opts = opts || {};
+    var cb = cb || function () { }
+    exports.shadowPass(pass, function (shadowPass) {
+        var cmd = 'usermod';
+        var args = ['-p', shadowPass, username];
+        if (opts.sudo) {
+            cmd = 'sudo';
+            args = ['usermod'].concat(args);
+        }
+        var passwd = spawn(cmd, args);
+        passwd.on('exit', function (code, signal) {
+            cb(code);
+        });
     });
 }
 
