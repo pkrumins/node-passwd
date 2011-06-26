@@ -104,17 +104,15 @@ exports.getAll = getUsers;
 
 exports.get = function (username, cb) {
     getUsers(function (users) {
-        if (users.length) {
-            users.forEach(function (user) {
-                if (user.username == username) {
-                    cb(user);
-                    return;
-                }
-            });
-        }
-        else {
-            cb(null);
-        }
+        foundUser = false;
+        for (i = 0; i < users.length; i++) {
+            var user = users[i];
+            if (user.username == username) {
+                cb(user);
+                return;
+            }
+        };
+        cb(null);
     });
 }
 
