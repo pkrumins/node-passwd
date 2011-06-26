@@ -110,6 +110,7 @@ exports.get = function (username, cb) {
                 return;
             }
         });
+        cb(null);
     });
 }
 
