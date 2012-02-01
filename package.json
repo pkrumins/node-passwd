@@ -1,6 +1,6 @@
 {
     "name" : "passwd",
-    "version" : "0.0.10",
+    "version" : "0.0.11",
     "description" : "Control /etc/passwd from node.js",
     "main" : "./index.js",
     "repository" : {
@@ -15,8 +15,11 @@
     "author" : {
         "name" : "Peteris Krumins",
         "email" : "peteris.krumins@gmail.com",
-        "url" : "http://www.catonmat.net"
+        "url" : "http://www.catonmat.net",
+        "twitter" : "http://twitter.com/pkrumins"
     },
-    "license" : "whatevs",
-    "engine" : { "node" : ">=0.4.0" }
+    "license" : "MIT",
+    "engine" : {
+        "node" : ">=0.4.0"
+    }
 }
