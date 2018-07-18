@@ -107,7 +107,7 @@ exports.get = function (username, cb) {
         foundUser = false;
         for (i = 0; i < users.length; i++) {
             var user = users[i];
-            if (user.username == username) {
+            if (user.username == username || user.userId == username) {
                 cb(user);
                 return;
             }
